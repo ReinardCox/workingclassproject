@@ -16,8 +16,9 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int CAMERA_ID_CODE = 0, GALLERY_ID_CODE = 1;
 //    File file = new File(this.getFilesDir(), "id.jpg");  ==== going to try another way =====
+
+    static final int CAMERA_ID_CODE = 0, GALLERY_ID_CODE = 1;
     static final String tempFileDir = Environment.getExternalStorageDirectory().getPath() + "/_pictureholder_id.jpg";;
     private Intent dialogIntent;
     private Uri imageFileUri;
@@ -44,19 +45,28 @@ public class MainActivity extends AppCompatActivity {
         //The if statement for the gallery function.
         if (requestCode == GALLERY_ID_CODE && resultCode == RESULT_OK && data != null) {
             imageFileUri = data.getData();
+
+            //This starts the next activity with a new purpose for dialogIntent.
+            dialogIntent = new Intent(this, SecondActivity.class);
+            dialogIntent.putExtra("filePackedForNextActivity", imageFileUri);
+            startActivity(dialogIntent);
+
+            //Takes the activity of the stack.
+             this.finish();
         }
 
         //The if statement for the camera function.
         if (requestCode == CAMERA_ID_CODE && resultCode == RESULT_OK) {
             imageFileUri = Uri.parse(String.valueOf(imageFileUri));
-        }
 
-        //This starts the next activity with a new purpose for dialogIntent.
-        dialogIntent = new Intent(this, SecondActivity.class);
-        dialogIntent.putExtra("filePackedForNextActivity", imageFileUri);
-        startActivity(dialogIntent);
-        //Takes the activity of the stack.
-       // this.finish();
+            //This starts the next activity with a new purpose for dialogIntent.
+            dialogIntent = new Intent(this, SecondActivity.class);
+            dialogIntent.putExtra("filePackedForNextActivity", imageFileUri);
+            startActivity(dialogIntent);
+
+            //Takes the activity of the stack.
+             this.finish();
+        }
     }
 
     //This is for the pop-up Dialog to show.
